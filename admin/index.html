@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartRoad - Admin Panel</title>
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen">
+            <div class="login-card">
+                <div class="logo">
+                    <h1>SmartRoad</h1>
+                    <p>Admin Panel</p>
+                </div>
+                <form id="loginForm">
+                    <input type="email" id="loginEmail" placeholder="Admin Email" required />
+                    <input type="password" id="loginPassword" placeholder="Password" required />
+                    <button type="submit" id="loginBtn">Sign In</button>
+                    <p id="loginError" class="error"></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="screen hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <span class="brand-icon">&#9733;</span>
+                    <span class="brand-text">SmartRoad</span>
+                    <span class="brand-badge">Admin</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <span class="nav-icon">&#9632;</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="reports">
+                        <span class="nav-icon">&#9776;</span>
+                        <span>Reports</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="sidebar-user">
+                        <span class="user-icon">&#9679;</span>
+                        <span id="adminName">admin@mail.com</span>
+                    </div>
+                    <button id="logoutBtn" class="sidebar-logout">Logout</button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Dashboard Page -->
+                <div id="page-dashboard" class="page active">
+                    <div class="page-header">
+                        <h2>Dashboard Overview</h2>
+                        <p>Manage and monitor all hazard reports</p>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-total">&#9632;</div>
+                            <div class="stat-info">
+                                <h3 id="totalReports">0</h3>
+                                <p>Total Reports</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-new">&#9632;</div>
+                            <div class="stat-info">
+                                <h3 id="newReports">0</h3>
+                                <p>New</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-investigating">&#9632;</div>
+                            <div class="stat-info">
+                                <h3 id="investigatingReports">0</h3>
+                                <p>Under Investigation</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-resolved">&#9632;</div>
+                            <div class="stat-info">
+                                <h3 id="resolvedReports">0</h3>
+                                <p>Resolved</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="page-reports" class="page">
+                    <div class="page-header">
+                        <h2>Hazard Reports</h2>
+                        <p>Search, filter, and manage all submitted reports</p>
+                    </div>
+                    <div class="filters">
+                        <input type="text" id="searchInput" placeholder="Search by username, description..." />
+                        <select id="filterType">
+                            <option value="">All Types</option>
+                            <option value="Pothole">Pothole</option>
+                            <option value="Flooding">Flooding</option>
+                            <option value="Fallen Tree">Fallen Tree</option>
+                            <option value="Traffic Accident">Traffic Accident</option>
+                            <option value="Damaged Road Sign">Damaged Road Sign</option>
+                            <option value="Broken Traffic Light">Broken Traffic Light</option>
+                        </select>
+                        <select id="filterStatus">
+                            <option value="">All Status</option>
+                            <option value="New">New</option>
+                            <option value="Under Investigation">Under Investigation</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                        <input type="date" id="filterDate" />
+                    </div>
+                    <div class="table-container">
+                        <table id="reportsTable">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Date/Time</th>
+                                    <th>Hazard Type</th>
+                                    <th>Description</th>
+                                    <th>Photo</th>
+                                    <th>GPS Coordinates</th>
+                                    <th>Status</th>
+                                    <th>User Agent</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="loading" class="hidden">
+                        <div class="spinner"></div>
+                        <p>Loading reports...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Edit Hazard Report</h2>
+            <form id="editForm">
+                <label>Status</label>
+                <select id="editStatus">
+                    <option value="New">New</option>
+                    <option value="Under Investigation">Under Investigation</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <label>Description</label>
+                <textarea id="editDescription" rows="3"></textarea>
+                <label>Hazard Type</label>
+                <select id="editType">
+                    <option value="Pothole">Pothole</option>
+                    <option value="Flooding">Flooding</option>
+                    <option value="Fallen Tree">Fallen Tree</option>
+                    <option value="Traffic Accident">Traffic Accident</option>
+                    <option value="Damaged Road Sign">Damaged Road Sign</option>
+                    <option value="Broken Traffic Light">Broken Traffic Light</option>
+                </select>
+                <div class="modal-actions">
+                    <button type="submit" id="saveBtn" class="btn-primary">Save</button>
+                    <button type="button" id="deleteBtn" class="btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
